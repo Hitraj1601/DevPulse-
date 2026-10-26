@@ -1,16 +1,14 @@
-# Compiled class file
+# Dependencies & Build Artefacts
+node_modules/
+dist/
+dist-ssr/
+*.local
+.vite/
+target/
+bin/
+
+# Compiled Java / Package files
 *.class
-
-# Log file
-*.log
-
-# BlueJ files
-*.ctxt
-
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
-
-# Package Files #
 *.jar
 *.war
 *.nar
@@ -18,7 +16,36 @@
 *.zip
 *.tar.gz
 *.rar
-
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 replay_pid*
+.mtj.tmp/
+*.ctxt
+
+# Environment Variables & Secrets
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+
+# IDE & Editor files
+.idea/
+.vscode/
+*.iml
+*.iws
+*.ipr
+.project
+.classpath
+.settings/
+
+# OS metadata
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Logs
+*.log
+logs/
+
+# Testcontainers / Docker temp
+.testcontainers.properties
