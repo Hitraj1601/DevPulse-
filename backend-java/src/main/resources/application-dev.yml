@@ -1,0 +1,10 @@
+# Development Profile Configuration
+logging:
+  level:
+    root: INFO
+    com.devpulse: DEBUG
+    org.springframework.web: INFO
+
+devpulse:
+  dev-ingestion:
+    enabled: true

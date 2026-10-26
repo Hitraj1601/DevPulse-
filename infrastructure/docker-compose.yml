@@ -1,0 +1,53 @@
+name: devpulse-ai
+
+services:
+  postgres:
+    image: postgres:16.4-alpine
+    container_name: devpulse-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-devpulse_db}
+      POSTGRES_USER: ${POSTGRES_USER:-devpulse_app}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-devpulse_local_dev_secret_change_in_prod}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./postgres/init-extensions.sql:/docker-entrypoint-initdb.d/01-init-extensions.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-devpulse_app} -d ${POSTGRES_DB:-devpulse_db}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - devpulse-net
+
+  redis:
+    image: redis:7.4-alpine
+    container_name: devpulse-redis
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes", "--maxmemory", "256mb", "--maxmemory-policy", "noeviction"]
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      start_period: 5s
+    networks:
+      - devpulse-net
+
+volumes:
+  postgres_data:
+    name: devpulse_postgres_data
+  redis_data:
+    name: devpulse_redis_data
+
+networks:
+  devpulse-net:
+    name: devpulse-network
+    driver: bridge
